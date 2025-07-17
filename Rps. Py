@@ -1,0 +1,76 @@
+import tkinter as tk
+import random
+
+class RockPaperScissors:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Rock Paper Scissors")
+        self.root.geometry("400x450")
+        self.root.resizable(False, False)
+
+        self.choices = ["Rock", "Paper", "Scissors"]
+        self.user_score = 0
+        self.computer_score = 0
+
+        # Title
+        tk.Label(root, text="Rock Paper Scissors", font=("Arial", 20, "bold")).pack(pady=10)
+
+        # Score display
+        self.score_label = tk.Label(root, text="You: 0 | Computer: 0", font=("Arial", 14))
+        self.score_label.pack(pady=5)
+
+        # Result display
+        self.result_label = tk.Label(root, text="", font=("Arial", 16), fg="blue")
+        self.result_label.pack(pady=10)
+
+        # Choice display
+        self.choices_label = tk.Label(root, text="", font=("Arial", 12))
+        self.choices_label.pack(pady=10)
+
+        # Buttons
+        self.button_frame = tk.Frame(root)
+        self.button_frame.pack(pady=10)
+
+        for choice in self.choices:
+            btn = tk.Button(self.button_frame, text=choice, width=10, font=("Arial", 12),
+                            command=lambda ch=choice: self.play(ch))
+            btn.pack(side="left", padx=10)
+
+        # Reset Button
+        self.reset_button = tk.Button(root, text="Reset Game", font=("Arial", 12), bg="red", fg="white",
+                                      command=self.reset_game)
+        self.reset_button.pack(pady=20)
+
+    def play(self, user_choice):
+        computer_choice = random.choice(self.choices)
+
+        self.choices_label.config(
+            text=f"You chose: {user_choice}   |   Computer chose: {computer_choice}"
+        )
+
+        if user_choice == computer_choice:
+            result = "It's a Tie!"
+        elif (user_choice == "Rock" and computer_choice == "Scissors") or \
+             (user_choice == "Paper" and computer_choice == "Rock") or \
+             (user_choice == "Scissors" and computer_choice == "Paper"):
+            result = "You Win!"
+            self.user_score += 1
+        else:
+            result = "You Lose!"
+            self.computer_score += 1
+
+        self.result_label.config(text=result)
+        self.score_label.config(text=f"You: {self.user_score} | Computer: {self.computer_score}")
+
+    def reset_game(self):
+        self.user_score = 0
+        self.computer_score = 0
+        self.score_label.config(text="You: 0 | Computer: 0")
+        self.result_label.config(text="")
+        self.choices_label.config(text="")
+
+# Run the app
+if __name__ == "__main__":
+    root = tk.Tk()
+    game = RockPaperScissors(root)
+    root.mainloop()
